@@ -3,8 +3,8 @@ import { Pool } from 'pg'
 export const client = new Pool({
   user: 'postgres',
   password: '123456',
-  host: 'localhost',
-  port: 5433,
+  host: 'db',
+  port: 5432,
   database: 'demo'
 })
 
@@ -26,7 +26,6 @@ const initializeDatabase = async () => {
         receiver_notification VARCHAR(100)  NOT NULL
       );
         `)
-    
 
     const notificationModel = client.query(`  
         CREATE TABLE IF NOT EXISTS notification (

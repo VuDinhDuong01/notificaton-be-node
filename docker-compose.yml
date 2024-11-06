@@ -11,5 +11,10 @@ services:
        - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - connect-db
 volumes:
   pgdata:
+networks:
+  connect-db:
+    driver: bridge
