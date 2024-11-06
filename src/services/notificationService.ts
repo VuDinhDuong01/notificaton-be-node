@@ -3,10 +3,9 @@ import { client } from "~/utils/connect-db"
 
 export const notificationService={
     createNotification:async (payload: any)=>{
-        const insert = 'INSERT INTO notification(sender_id, receiver_id,content ) VALUES ($1, $2, $3) RETURNING *'
-        const values = [payload.sender_id, payload.receiver_id, payload.content]
-        const result=  await client.query(insert, values);
-        return result.rows[0]
+      const insert = 'INSERT INTO notification(id, sender_id, receiver_id, content) VALUES ($1, $2, $3, $4) RETURNING *';
+      const newNotification = await client.query(insert, [payload.id, payload.sender_id, payload.receiver_id, payload.content])
+        return newNotification.rows[0]
     },
 
     updateNotification:async(payload:any)=>{

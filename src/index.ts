@@ -42,9 +42,9 @@ io.on('connection', (socket) => {
     const receiver_to = user[value?.receiver_notification]?.socket_id
     socket.to(receiver_to).emit('server-form-data', value)
     // lưu  notification to db
-    const insertNotification = 'INSERT INTO notification(content,sender_id, receiver_id) VALUES ($1, $2, $3) RETURNING *'
-    const valuesInsertNotification = [value?.content, value?.sender_notification, value?.receiver_notification]
-    await client.query(insertNotification, valuesInsertNotification)
+    const insert = 'INSERT INTO notification(id, sender_id, receiver_id, content) VALUES ($1, $2, $3, $4) RETURNING *';
+    const valuesInsertNotification = [value?.id,value?.sender_notification,value?.receiver_notification,value?.content]
+    await client.query(insert, valuesInsertNotification)
     // luu form to db
     const insertForm = 'INSERT INTO form(content,sender_notification, receiver_notification) VALUES ($1, $2, $3) RETURNING *'
     const valuesInsertForm = [value?.content, value?.sender_notification, value?.receiver_notification]
