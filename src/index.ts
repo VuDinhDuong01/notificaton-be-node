@@ -1,12 +1,12 @@
 import express from 'express'
-import { client, connectPostgres } from './utils/connect-db'
+import {connectPostgres } from './utils/connect-db'
 import { appRouter } from './routes'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 const app = express()
 const httpServer = createServer(app)
-const port = 4000
+const port = 8000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -35,20 +35,11 @@ io.on('connection', (socket) => {
     }
   }
 
-  
   socket.on('form-data', async (value) => {
-  
-   // { content: '9a', receiver_notification: 12, sender_notification: 11 }
     const receiver_to = user[value?.receiver_notification]?.socket_id
-    socket.to(receiver_to).emit('server-form-data', value)
-    // lưu  notification to db
-    const insert = 'INSERT INTO notification(id, sender_id, receiver_id, content) VALUES ($1, $2, $3, $4) RETURNING *';
-    const valuesInsertNotification = [value?.id,value?.sender_notification,value?.receiver_notification,value?.content]
-    await client.query(insert, valuesInsertNotification)
-    // luu form to db
-    const insertForm = 'INSERT INTO form(content,sender_notification, receiver_notification) VALUES ($1, $2, $3) RETURNING *'
-    const valuesInsertForm = [value?.content, value?.sender_notification, value?.receiver_notification]
-    await client.query(insertForm, valuesInsertForm)
+    if (receiver_to) {
+      socket.to(receiver_to).emit('server-form-data', value)
+    }
   })
   console.log('user connect:', user)
   socket.on('disconnect', () => {
