@@ -2,7 +2,6 @@ import { client } from '~/utils/connect-db'
 import { getSocket } from '~/utils/socket'
 
 export const notificationService = {
-
   createNotification: async (payload: any) => {
     const user = getSocket()
     const insert = 'INSERT INTO notification(id, sender_id, receiver_id, content) VALUES ($1, $2, $3, $4) RETURNING *'
